@@ -19,4 +19,10 @@ class Memo < Post
 
     @text.unshift(time_string)
   end
+
+  def to_db_hash
+    super.merge(
+      text: @text.join('\n\r')
+    )
+  end
 end
