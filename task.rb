@@ -10,27 +10,30 @@ class Task < Post
   end
 
   def read_from_console
-    puts 'Що необхідно зробити?'
+    puts 'Що треба зробити?'
     @text = STDIN.gets.chomp
 
-    puts 'Термін виконання? Вкажіть дату в форматі ДД.ММ.РРРР, наприклад 14.02.2020'
+    puts 'До якого числа? Вкажіть дату в форматі ДД.ММ.РРРР,' \
+      'наприклад 15.02.2020'
     input = STDIN.gets.chomp
 
     @due_date = Date.parse(input)
   end
 
   def to_strings
-    time_string = "Створено: #{@created_at.strftime('%Y.%m.%d, %H:%M:%S')} \n\r \n\r"
-
-    deadline = "Реченець: #{@due_date}"
+    deadline = "Реченець: #{@due_date.strftime('%Y.%m.%d')}"
+    time_string = "Створено: #{@created_at.strftime('%Y.%m.%d, %H:%M:%S')} \n\r"
 
     [deadline, @text, time_string]
   end
 
   def to_db_hash
-    super.merge(
-      text: @text,
-      due_date: @due_date.to_s
-    )
+    super.merge(text: @text, due_date: @due_date.to_s)
+  end
+
+  def load_data(data_hash)
+    super
+
+    @due_date = Date.parse(data_hash['due_date'])
   end
 end
